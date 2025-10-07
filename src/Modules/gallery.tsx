@@ -7,8 +7,9 @@ interface NasaPic {
   id: string;
   title: string;
   date: string;
-  keywords: string[];
+  albums: string[];
   imageUrl: string;
+  description: string;
 }
 
 const Gallery: React.FC = () => {
@@ -16,7 +17,7 @@ const Gallery: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [searchWord, setSearchWord] = useState("galaxy");
   const [text, setText] = useState("");
-  const [keywordFilter, setKeywordFilter] = useState("");
+  const [albumFilter, setAlbumFilter] = useState("");
 
   const getPics = async (word: string) => {
     setLoading(true);
@@ -30,14 +31,15 @@ const Gallery: React.FC = () => {
         .slice(0, 50)
         .map((x: any) => {
           const data = x.data[0];
-          const keywords =
-            data.keywords && data.keywords.length > 0 ? data.keywords : ["Other"];
+          const albums =
+            data.album && data.album.length > 0 ? data.album : ["Other"];
           return {
             id: data.nasa_id,
             title: data.title,
             date: data.date_created,
-            keywords,
+            albums,
             imageUrl: x.links[0].href,
+            description: data.description,
           };
         });
 
@@ -54,30 +56,30 @@ const Gallery: React.FC = () => {
   }, [searchWord]);
 
 
-  const keywordSet = new Set<string>();
+  const albumSet = new Set<string>();
   let hasOther = false;
 
   pics.forEach((p) => {
-    if (p.keywords && p.keywords.length > 0) {
-      p.keywords.forEach((k) => keywordSet.add(k));
+    if (p.albums && p.albums.length > 0) {
+      p.albums.forEach((a) => albumSet.add(a));
     } else {
       hasOther = true;
     }
   });
 
-  const allKeywords = Array.from(keywordSet).sort();
-  if (hasOther || pics.some((p) => p.keywords.includes("Other"))) {
-    allKeywords.push("Other");
+  const allAlbums = Array.from(albumSet).sort();
+  if (hasOther || pics.some((p) => p.albums.includes("Other"))) {
+    allAlbums.push("Other");
   }
 
   const shownPics = pics.filter(
-    (p) => !keywordFilter || p.keywords.includes(keywordFilter)
+    (p) => !albumFilter || p.albums.includes(albumFilter)
   );
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setSearchWord(text.trim() || "galaxy");
-    setKeywordFilter("");
+    setAlbumFilter("");
   };
 
   return (
@@ -99,14 +101,14 @@ const Gallery: React.FC = () => {
 
       <div className={styles.filters}>
         <select
-          value={keywordFilter}
-          onChange={(e) => setKeywordFilter(e.target.value)}
+          value={albumFilter}
+          onChange={(e) => setAlbumFilter(e.target.value)}
           className={styles.select}
         >
-          <option value="">All keywords</option>
-          {allKeywords.map((k) => (
-            <option key={k} value={k}>
-              {k}
+          <option value="">All Albums</option>
+          {allAlbums.map((a) => (
+            <option key={a} value={a}>
+              {a}
             </option>
           ))}
         </select>

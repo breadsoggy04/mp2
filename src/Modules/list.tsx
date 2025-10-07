@@ -9,6 +9,7 @@ interface NasaThing {
   date: string;
   type: string;
   imageUrl: string;
+  description?: string;
 }
 
 const List: React.FC = () => {
@@ -30,10 +31,12 @@ const List: React.FC = () => {
         .filter((x: any) => x.data && x.data[0] && x.links)
         .map((x: any) => ({
           id: x.data[0].nasa_id,
+          description: x.data[0].description || "No description available",
           title: x.data[0].title,
           date: x.data[0].date_created,
           type: x.data[0].media_type,
           imageUrl: x.links[0]?.href || "",
+          
         }));
 
       setData(results);

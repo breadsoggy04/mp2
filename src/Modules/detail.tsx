@@ -7,6 +7,7 @@ interface Photo {
   title: string;
   date: string;
   imageUrl: string;
+  description?: string;
 }
 
 interface LocationState {
@@ -48,6 +49,9 @@ const Detail: React.FC = () => {
           ? new Date(currentPhoto.date).toLocaleDateString()
           : "Unknown"}
       </p>
+        {currentPhoto.description && (
+          <p className={styles.description}>{currentPhoto.description}</p>
+        )}
 
       <img
         src={currentPhoto.imageUrl || "https://via.placeholder.com/400"}

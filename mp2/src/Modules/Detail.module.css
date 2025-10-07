@@ -1,0 +1,41 @@
+.container {
+  padding: 1rem;
+  text-align: center;
+}
+
+.image {
+  width: 100%;
+  max-width: 600px;
+  border-radius: 8px;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 1rem 0 0.5rem;
+}
+
+.date {
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.buttons {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #282c34;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #3c4048;
+}

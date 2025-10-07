@@ -49,9 +49,7 @@ const Detail: React.FC = () => {
           ? new Date(currentPhoto.date).toLocaleDateString()
           : "Unknown"}
       </p>
-        {currentPhoto.description && (
-          <p className={styles.description}>{currentPhoto.description}</p>
-        )}
+       
 
       <img
         src={currentPhoto.imageUrl || "https://via.placeholder.com/400"}
@@ -59,6 +57,10 @@ const Detail: React.FC = () => {
         className={styles.image}
       />
 
+       {currentPhoto.description && (
+          <p className={styles.description}>{currentPhoto.description}</p>
+        )}
+        
       <div className={styles.buttons}>
         <button onClick={handlePrev} className={styles.button}>
           &lt; Previous

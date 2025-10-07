@@ -7,7 +7,7 @@ interface NasaPic {
   id: string;
   title: string;
   date: string;
-  albums: string[];
+  center: string;
   imageUrl: string;
   description: string;
 }
@@ -17,7 +17,7 @@ const Gallery: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [searchWord, setSearchWord] = useState("galaxy");
   const [text, setText] = useState("");
-  const [albumFilter, setAlbumFilter] = useState("");
+  const [centerFilter, setCenterFilter] = useState("");
 
   const getPics = async (word: string) => {
     setLoading(true);
@@ -31,22 +31,18 @@ const Gallery: React.FC = () => {
         .slice(0, 50)
         .map((x: any) => {
           const data = x.data[0];
-          const albums =
-            data.album && data.album.length > 0 ? data.album : ["Other"];
           return {
             id: data.nasa_id,
             title: data.title,
             date: data.date_created,
-            albums,
+            center: data.center || "Unknown Center",
             imageUrl: x.links[0].href,
-            description: data.description,
+            description: data.description || "No description available",
           };
         });
 
       setPics(items);
-    } catch (err) {
-      console.log("Problem fetching pics:", err);
-    } finally {
+    }  finally {
       setLoading(false);
     }
   };
@@ -55,31 +51,18 @@ const Gallery: React.FC = () => {
     getPics(searchWord);
   }, [searchWord]);
 
-
-  const albumSet = new Set<string>();
-  let hasOther = false;
-
-  pics.forEach((p) => {
-    if (p.albums && p.albums.length > 0) {
-      p.albums.forEach((a) => albumSet.add(a));
-    } else {
-      hasOther = true;
-    }
-  });
-
-  const allAlbums = Array.from(albumSet).sort();
-  if (hasOther || pics.some((p) => p.albums.includes("Other"))) {
-    allAlbums.push("Other");
-  }
+  const centerSet = new Set<string>();
+  pics.forEach((p) => centerSet.add(p.center));
+  const allCenters = Array.from(centerSet).sort();
 
   const shownPics = pics.filter(
-    (p) => !albumFilter || p.albums.includes(albumFilter)
+    (p) => !centerFilter || p.center === centerFilter
   );
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setSearchWord(text.trim() || "galaxy");
-    setAlbumFilter("");
+    setCenterFilter("");
   };
 
   return (
@@ -101,14 +84,14 @@ const Gallery: React.FC = () => {
 
       <div className={styles.filters}>
         <select
-          value={albumFilter}
-          onChange={(e) => setAlbumFilter(e.target.value)}
+          value={centerFilter}
+          onChange={(e) => setCenterFilter(e.target.value)}
           className={styles.select}
         >
-          <option value="">All Albums</option>
-          {allAlbums.map((a) => (
-            <option key={a} value={a}>
-              {a}
+          <option value="">All Centers</option>
+          {allCenters.map((c) => (
+            <option key={c} value={c}>
+              {c}
             </option>
           ))}
         </select>
@@ -134,6 +117,7 @@ const Gallery: React.FC = () => {
                 <p className={styles.cardDate}>
                   {pic.date ? pic.date.slice(0, 10) : "Unknown date"}
                 </p>
+                <p className={styles.cardCenter}>{pic.center}</p>
               </div>
             </Link>
           ))}

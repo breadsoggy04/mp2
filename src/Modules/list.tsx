@@ -31,7 +31,7 @@ const List: React.FC = () => {
         .filter((x: any) => x.data && x.data[0] && x.links)
         .map((x: any) => ({
           id: x.data[0].nasa_id,
-          description: x.data[0].description || "No description available",
+          description: x.data[0].description,
           title: x.data[0].title,
           date: x.data[0].date_created,
           type: x.data[0].media_type,
@@ -40,8 +40,6 @@ const List: React.FC = () => {
         }));
 
       setData(results);
-    } catch (err) {
-      console.log("Problem getting data:", err);
     } finally {
       setIsLoading(false);
     }

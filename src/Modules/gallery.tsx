@@ -35,9 +35,9 @@ const Gallery: React.FC = () => {
             id: data.nasa_id,
             title: data.title,
             date: data.date_created,
-            center: data.center || "Unknown Center",
+            center: data.center ,
             imageUrl: x.links[0].href,
-            description: data.description || "No description available",
+            description: data.description ,
           };
         });
 
@@ -74,7 +74,7 @@ const Gallery: React.FC = () => {
           type="text"
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="Search pictures"
+          placeholder="pictures"
           className={styles.input}
         />
         <button type="submit" className={styles.button}>
